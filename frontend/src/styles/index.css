@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0b0f1a;
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(99, 102, 241, 0.10) 0%, transparent 45%),
+      radial-gradient(circle at 85% 20%, rgba(52, 211, 153, 0.08) 0%, transparent 40%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight text-ink-primary;
+  }
+
+  ::selection {
+    @apply bg-accent-mint/30 text-ink-primary;
+  }
+
+  /* Visible keyboard focus everywhere - accessibility floor */
+  :focus-visible {
+    outline: 2px solid #34d399;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Signature glass card: subtle gradient hairline top border that glows on hover */
+  .glass-card {
+    @apply relative rounded-xl2 border border-white/[0.08] bg-base-panel/70 backdrop-blur-xl shadow-glass;
+  }
+
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.5), rgba(99, 102, 241, 0.5));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.35;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .glass-card:hover::before {
+    opacity: 0.9;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-gradient px-4 py-2.5
+           font-display font-semibold text-base tracking-tight text-[#0B0F1A] shadow-glow
+           transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98]
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/5
+           px-4 py-2.5 font-display font-medium text-ink-primary transition-colors duration-150
+           hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-accent-rose/30
+           bg-accent-rose/10 px-4 py-2.5 font-display font-medium text-accent-rose
+           transition-colors duration-150 hover:bg-accent-rose/20;
+  }
+
+  .input-field {
+    @apply w-full rounded-lg border border-white/10 bg-white/5 px-3.5 py-2.5 text-ink-primary
+           placeholder:text-ink-muted transition-colors duration-150
+           focus:border-accent-mint/50 focus:bg-white/[0.07] focus:outline-none;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-ink-secondary;
+  }
+
+  .field-error {
+    @apply mt-1 text-xs text-accent-rose;
+  }
+
+  /* Money figures: tabular mono is the app's signature data treatment */
+  .money {
+    @apply font-mono tabular-nums;
+  }
+
+  .gradient-text {
+    @apply bg-brand-gradient bg-clip-text text-transparent;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+
+  .badge-low {
+    @apply bg-accent-mint/15 text-accent-mint;
+  }
+
+  .badge-medium {
+    @apply bg-accent-amber/15 text-accent-amber;
+  }
+
+  .badge-high {
+    @apply bg-accent-rose/15 text-accent-rose;
+  }
+
+  .skeleton {
+    @apply rounded-md bg-gradient-to-r from-white/5 via-white/10 to-white/5 bg-[length:800px_100%] animate-shimmer;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-ink-secondary
+           transition-colors duration-150 hover:bg-white/5 hover:text-ink-primary;
+  }
+
+  .sidebar-link-active {
+    @apply bg-brand-gradient-soft text-ink-primary relative;
+  }
+
+  .sidebar-link-active::before {
+    content: "";
+    @apply absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-brand-gradient;
+  }
+}

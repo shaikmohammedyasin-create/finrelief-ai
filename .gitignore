@@ -1,0 +1,22 @@
+# --- Python / Backend ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+*.db
+*.sqlite3
+.env
+backend/finrelief.db
+
+# --- Node / Frontend ---
+node_modules/
+dist/
+build/
+.env.local
+.env.*.local
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
