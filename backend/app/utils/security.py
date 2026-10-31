@@ -1,18 +1,23 @@
 """
 Password hashing utilities.
 
-Uses passlib's bcrypt backend. bcrypt has a 72-byte input limit;
-passlib handles truncation-related errors for us, but we still guard
-against absurdly long inputs at the schema validation layer.
+Uses direct bcrypt to avoid passlib 1.7.4 incompatibility with bcrypt >= 4.1.0
+(where passlib's internal wrap-bug detection throws ValueError on 72+ byte checks).
 """
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
 
 def hash_password(plain_password: str) -> str:
-    return pwd_context.hash(plain_password)
+    pwd_bytes = plain_password[:72].encode("utf-8")
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(pwd_bytes, salt).decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        pwd_bytes = plain_password[:72].encode("utf-8")
+        hash_bytes = hashed_password.encode("utf-8")
+        return bcrypt.checkpw(pwd_bytes, hash_bytes)
+    except Exception:
+        return False
+
