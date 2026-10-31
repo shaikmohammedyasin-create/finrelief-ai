@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: finrelief-ai-backend
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: CORS_ORIGINS
+        value: https://infallible-agnesi-bdee48.vercel.app
+      - key: GEMINI_API_KEY
+        value: ""
+      - key: SECRET_KEY
+        value: "CHANGE_ME_IN_PRODUCTION"
+      - key: DATABASE_URL
+        value: "sqlite:///./finrelief.db"
+    healthCheckPath: /health
