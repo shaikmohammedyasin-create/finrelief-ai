@@ -23,7 +23,8 @@ from app.api.negotiation import router as negotiation_router
 from app.api.settlement import router as settlement_router
 from app.api.user import router as user_router
 from app.config import settings
-from app.database.session import Base, engine
+from app.database.session import Base, SessionLocal, engine
+from app.models.user import User
 from app.middleware.error_handler import register_exception_handlers
 from app.middleware.rate_limiter import RateLimiterMiddleware
 
@@ -72,6 +73,9 @@ def create_app() -> FastAPI:
     def health_check():
         return {"status": "ok", "app": settings.APP_NAME, "environment": settings.ENVIRONMENT}
 
+    # Demo user credentials (bcrypt hash of "Demo1234")
+    DEFAULT_DEMO_HASH = "$2b$12$OxoCwLBkl1YAJ3S9q295bOKMxUfLHgx2lYn8CZGIDPyNmx4mVbwFm"
+
     @app.on_event("startup")
     def on_startup():
         # For SQLite/dev convenience only. In production, use Alembic
@@ -81,6 +85,15 @@ def create_app() -> FastAPI:
             logger.info("SQLite tables ensured via create_all().")
         else:
             logger.info("Non-SQLite database detected - run Alembic migrations before serving traffic.")
+        # Seed demo user if not present
+        from datetime import datetime
+        import uuid
+        with SessionLocal() as db:
+            if not db.query(User).filter(User.email == "demo@finrelief.ai").first():
+                db.add(User(id=str(uuid.uuid4()), name="Demo User", email="demo@finrelief.ai",
+                           hashed_password=DEFAULT_DEMO_HASH, created_at=datetime.utcnow()))
+                db.commit()
+                logger.info("Demo user seeded into production database.")
 
     return app
 
