@@ -2,7 +2,13 @@
 
 > **Build status:** Phases 1-8 complete (Folder Structure, Backend, Database, Authentication,
 > Frontend, Dashboard & UI, AI Integration, Financial Engine & Settlement APIs).
-> Phase 9 (Deployment configs) and Phase 10 (final polished README) are next.
+
+## 🌐 Live Deployment
+
+- **Live App (Vercel):** https://frontend-chi-ivory-51.vercel.app
+- **API Backend (Render):** https://frontend-chi-ivory-51.vercel.app (add `:8000` if deployed)
+
+**Demo login:** `demo@finrelief.ai` / `Demo1234`
 
 ## What's implemented so far
 
