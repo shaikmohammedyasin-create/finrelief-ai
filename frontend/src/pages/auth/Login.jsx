@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiLock, FiMail } from "react-icons/fi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -6,6 +6,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useToast } from "../../context/ToastContext.jsx";
 import { useAuth } from "../../hooks/useAuth.js";
 import { extractErrorMessage } from "../../services/api.js";
+
+// Pre-filled demo credentials so visitors can explore the app without registering.
+const DEMO_EMAIL = "demo@finrelief.ai";
+const DEMO_PASSWORD = "Demo1234";
 
 export default function Login() {
   const { login } = useAuth();
@@ -17,8 +21,15 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
+
+  // Auto-fill demo credentials on mount.
+  useEffect(() => {
+    setValue("email", DEMO_EMAIL, { shouldValidate: false });
+    setValue("password", DEMO_PASSWORD, { shouldValidate: false });
+  }, [setValue]);
 
   async function onSubmit(values) {
     setIsSubmitting(true);
@@ -43,6 +54,9 @@ export default function Login() {
           </Link>
           <h1 className="mt-6 text-2xl font-semibold">Welcome back</h1>
           <p className="mt-1 text-sm text-ink-secondary">Log in to manage your debt recovery plan.</p>
+          <p className="mt-2 text-xs text-ink-tertiary">
+            Demo: {DEMO_EMAIL} / {DEMO_PASSWORD}
+          </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="glass-card space-y-4 p-6">
@@ -54,7 +68,7 @@ export default function Login() {
                 id="email"
                 type="email"
                 className="input-field pl-9"
-                placeholder="you@example.com"
+                placeholder={DEMO_EMAIL}
                 {...register("email", { required: "Email is required" })}
               />
             </div>
